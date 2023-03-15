@@ -59,13 +59,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npx semantic-release
       - name: Deploy to Staging
-        if: github.event_name == 'push' && github.ref = 'refs/heads/develop'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         run: npx surge --project ./build --domain lewd-insect.surge.sh
       - name: Deploy to Production
-        if: github.event_name == 'push' && github.ref = 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npx surge --project ./build --domain master-milkie.surge.sh
       - name: Upload Coverage Reports
-        if: github.event_name == 'push' && github.ref = 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npx codecov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
