@@ -1,13 +1,19 @@
 name: CI
 on:
   pull_request:
-    branches: [develop]
+    branches: [develop,main]
   push:
-    branches: [develop]
+    branches: [develop,main]
 
 
 jobs:
   build:
+    permissions:
+      packages: write
+      contents: write
+    env:
+      SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+      SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,6 +29,7 @@ jobs:
         with:
           node-version: "18.2"
       - run: npm ci
+      - run: npm run format
       - run: npm run format:check
       - run: npm test -- --coverage
         env:
@@ -41,9 +48,24 @@ jobs:
         with:
           name: build
           path: build
-      - name: Deploy to Staging
-        if: github.event_name == 'push'
-        run: npx surge --project ./build --domain lewd-insect.surge.sh
+      - name: ZIP Assets
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'        
+        run: |
+          zip -r build.zip ./build
+          zip -r coverage.zip ./coverage
+      - name: Create a Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'        
         env:
-          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-          SURGE_TOKEN: ${{ Secrets.SURGE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx semantic-release
+      - name: Deploy to Staging
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        run: npx surge --project ./build --domain lewd-insect.surge.sh
+      - name: Deploy to Production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx surge --project ./build --domain master-milkie.surge.sh
+      - name: Upload Coverage Reports
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx codecov
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
