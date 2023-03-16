@@ -31,7 +31,7 @@ jobs:
       - run: npm ci
       - run: npm run format
       - run: npm run format:check
-      - run: npm test -- --coverag
+      - run: npm test -- --coverage
         env:
           CI: true
       - name: Upload test coverage
