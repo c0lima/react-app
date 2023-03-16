@@ -3,14 +3,6 @@ jobs:
   testing-action:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/hello
-        id: hello
-        with:
-          who-to-greet: "World"
-      - run: |
-          echo "Time: ${{ steps.hello.outputs.time }}"
-          
       - uses: ./.github/actions/hello-docker
         id: hello
         with:
