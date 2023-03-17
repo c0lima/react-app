@@ -7,5 +7,5 @@ COPY . .
 RUN apt-get update
 RUN apt-get -y install zip
 RUN composer install
-
-ENTRYPOINT["php", "/usr/src/app/script.php"]
+    
+ENTRYPOINT ["php", "/usr/src/app/script.php"]
