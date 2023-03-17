@@ -1,8 +1,8 @@
 #!/bin/sh -l
 
-echo "::debug:: Debug message"
-echo "::warning:: Warning message"
-echo "::error:: error message"
+#echo "::debug:: Debug message"
+#echo "::warning:: Warning message"
+#echo "::error:: error message"
 
 echo "::add-mask::$1"
 echo "Hello $1"
@@ -15,4 +15,4 @@ echo "some stuff"
 echo "some stuff"
 echo "::endgroup::"
 
-echo "::set-env name=HELLO::hello"
+#echo "::set-env name=HELLO::hello"
