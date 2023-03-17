@@ -6,7 +6,7 @@ jobs:
       - uses: ./.github/actions/hello-docker
         id: hello
         with:
-          who-to-greet: "World"
+          who-to-greet: "Worldd"
       - run: |
           echo "Time: ${{ steps.hello.outputs.time }}"
           echo $HELLO
